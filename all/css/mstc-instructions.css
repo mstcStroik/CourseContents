@@ -1,0 +1,263 @@
+:root {
+  --mstc-burgundy: #7a1f3d;
+  --mstc-burgundy-dark: #5c1730;
+  --mstc-charcoal: #222222;
+  --mstc-ink: #2f2f2f;
+  --mstc-cream: #f6f2ee;
+  --mstc-white: #ffffff;
+  --mstc-line: #d8c8cf;
+  --mstc-accent: #c9a66b;
+  --mstc-shadow: 0 14px 34px rgba(34, 34, 34, 0.08);
+  --content-width: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--mstc-ink);
+  background:
+    radial-gradient(circle at top right, rgba(122, 31, 61, 0.1), transparent 28%),
+    linear-gradient(180deg, #fbf9f7 0%, var(--mstc-cream) 100%);
+}
+
+img {
+  width: 100%; /* Scales to match the parent/screen width */
+  height: auto; /* Maintains original aspect ratio */
+}
+
+a {
+  color: var(--mstc-burgundy);
+}
+
+a:hover {
+  color: var(--mstc-burgundy-dark);
+}
+
+.site-header {
+  background: linear-gradient(135deg, var(--mstc-burgundy-dark), var(--mstc-burgundy));
+  color: var(--mstc-white);
+  padding: 3.5rem 1.5rem 2.5rem;
+}
+
+.header-inner,
+.page-shell {
+  width: min(var(--content-width), calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.site-header h1 {
+  margin: 0;
+  max-width: 16ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 1.05;
+}
+
+.subtitle {
+  max-width: 56rem;
+  margin: 1rem 0 0;
+  font-size: 1.08rem;
+}
+
+.page-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem 0 3rem;
+}
+
+.toc,
+.content-card,
+.callout,
+.reference-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--mstc-line);
+  border-radius: 22px;
+  box-shadow: var(--mstc-shadow);
+}
+
+.toc {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  padding: 1.25rem;
+}
+
+.toc h2,
+.content-card h2,
+.content-card h3,
+.reference-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--mstc-charcoal);
+}
+
+.toc h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.toc ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.toc li + li {
+  margin-top: 0.45rem;
+}
+
+.content-column {
+  display: grid;
+  gap: 1rem;
+}
+
+.content-card {
+  padding: 1.6rem;
+}
+
+.content-card h2 {
+  margin-top: 0;
+  font-size: 1.7rem;
+}
+
+.content-card h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.content-card ul,
+.content-card ol {
+  padding-left: 1.25rem;
+}
+
+.content-card li + li {
+  margin-top: 0.35rem;
+}
+
+.step-list > li {
+  margin-bottom: 0.7rem;
+}
+
+.callout {
+  padding: 1rem 1.1rem;
+  border-left: 6px solid var(--mstc-burgundy);
+}
+
+.callout strong {
+  color: var(--mstc-burgundy-dark);
+}
+
+codeLight,
+pre {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+codeLight {
+  background: #f4eef1;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+}
+
+pre {
+  margin: 0.9rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: #241d20;
+  color: #f7f0f3;
+  border-radius: 14px;
+}
+
+codeDark,
+pre {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+codeDark{
+  background: #4d2137;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+}
+
+pre {
+  margin: 0.9rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: #471f33;
+  color: #f7f0f3;
+  border-radius: 14px;
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.reference-card {
+  padding: 1rem;
+}
+
+.reference-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.65rem;
+  color: var(--mstc-burgundy-dark);
+  font-size: 1.05rem;
+}
+
+.reference-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.build-order {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.build-step {
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  background: var(--mstc-burgundy);
+  color: var(--mstc-white);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.site-footer {
+  width: min(var(--content-width), calc(100% - 2rem));
+  margin: 0 auto 2rem;
+  padding: 1rem 0 0;
+  color: #5d5257;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .toc {
+    position: static;
+  }
+}
