@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zoo 1.1 Part 3: Web Actions and Object Collaboration</title>
+  <link rel="stylesheet" type="text/css" href="https://mstcStroik.github.io/CourseContents/ObjectOrientedProgramming2/Unit1/styles/Style1-1.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Zoo 1.1, Part 3: Web Actions and Object Collaboration</h1>
+      <p class="subtitle">ASP.NET Core web app version</p>
+    </header>
+
+    <section class="card">
+      <p>In this part, you will make the zoo objects collaborate when a guest visits the booth. The browser button replaces the original WPF button click, but the object-oriented behavior remains the focus.</p>
+    </section>
+
+    <h2>Topics Covered</h2>
+    <ul>
+      <li>Razor Page form posts</li>
+      <li>PageModel handler methods</li>
+      <li>Method calls and return values</li>
+      <li>Sequence diagrams</li>
+      <li>Object responsibility</li>
+      <li>Validation instead of crash-based checks</li>
+      <li>Encapsulation through business methods</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>OOP reminder:</strong> Ask the object that owns the data to do the work. Money changes belong near <code>Wallet</code>. Inventory changes belong near <code>Booth</code>. Admission belongs near <code>Zoo</code>.</p>
+    </div>
+
+    <h2>1. Add the Admit Guest Web Action</h2>
+    <p>The original assignment used a WPF button named <code>admitGuestButton</code>. In this web version, use a Razor Page form that posts to a PageModel handler.</p>
+    <ol>
+      <li>Open <code>Pages/Index.cshtml</code>.</li>
+      <li>Add a form with a submit button for admitting a demo guest.</li>
+      <li>Use a page handler such as <code>OnPostAdmitDemoGuest</code> in <code>Pages/Index.cshtml.cs</code>.</li>
+    </ol>
+
+    <pre><code>&lt;form method="post" asp-page-handler="AdmitDemoGuest"&gt;
+    &lt;button type="submit"&gt;Admit guest&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Browser screenshot showing Admit Guest button on the zoo dashboard.</div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>Clicking the button reaches <code>OnPostAdmitDemoGuest</code>.</li>
+      <li>The page redirects or reloads after the post.</li>
+      <li>The app still builds and runs.</li>
+    </ul>
+
+    <h2>2. Create Method Stubs for the Visit Flow</h2>
+    <p>Add the methods and properties needed for a guest to visit the ticket booth and purchase a ticket.</p>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Class diagram showing Guest, Zoo, Booth, Wallet, and Employee methods.</div>
+
+    <h3>Suggested Methods</h3>
+    <ul>
+      <li><code>Zoo.AddGuest(Guest guest, Ticket ticket)</code></li>
+      <li><code>Zoo.SellTicket(Guest guest)</code></li>
+      <li><code>Guest.VisitTicketBooth(Booth ticketBooth)</code></li>
+      <li><code>Booth.SellTicket(decimal payment)</code></li>
+      <li><code>Employee.FindTicket(List&lt;Ticket&gt; tickets)</code></li>
+      <li><code>Wallet.RemoveMoney(decimal payment)</code></li>
+      <li><code>Ticket.Redeem()</code></li>
+    </ul>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>The method stubs compile.</li>
+      <li>The method names, parameters, and return types match the diagram provided by your instructor.</li>
+    </ul>
+
+    <h2>3. Sell a Ticket Through the Web Request</h2>
+    <p>In <code>OnPostAdmitDemoGuest</code>, create or load a guest and call the zoo method that starts the ticket purchase process.</p>
+    <ol>
+      <li>Create a demo guest named Ethel who is 42 years old and has <code>$30</code>.</li>
+      <li>Call the zoo's ticket-selling method.</li>
+      <li>If the guest receives a valid ticket, admit the guest to the zoo.</li>
+      <li>Display a useful status message on the dashboard.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Sequence diagram showing the Admit Guest request calling Zoo, Guest, Booth, Wallet, and Employee.</div>
+
+    <div class="warning">
+      <p><strong>Web app adjustment:</strong> Do not treat a null reference exception as a successful test result. In a web app, return a clear message such as <code>No tickets remaining</code> or <code>Not enough money for a ticket</code>.</p>
+    </div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>A guest receives a ticket only when enough money is available.</li>
+      <li>The ticket is removed from booth inventory.</li>
+      <li>The guest is admitted only when a ticket exists.</li>
+      <li>The browser displays the latest result after the button is clicked.</li>
+    </ul>
+
+    <h2>4. Add Safe Method Details</h2>
+    <p>The method stubs now need real rules. The booth should protect its own sale rules.</p>
+    <ol>
+      <li>In <code>Booth.SellTicket</code>, check whether the payment is enough to buy a ticket.</li>
+      <li>Only find and remove a ticket if the payment is sufficient.</li>
+      <li>If a ticket is found, add the payment to the booth's money balance.</li>
+      <li>In <code>Ticket.Redeem</code>, mark the ticket as redeemed.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>Encapsulation check:</strong> The code outside <code>Booth</code> should not remove tickets from the booth's list directly. It should ask the booth to sell a ticket.</p>
+    </div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>The booth gains the ticket price after a successful sale.</li>
+      <li>The guest loses the ticket price after a successful sale.</li>
+      <li>The ticket is redeemed before or during admission, as directed by your instructor.</li>
+      <li>Changing the ticket price in one place changes the behavior everywhere it should.</li>
+    </ul>
+
+    <h2>5. Give and Sell Additional Booth Items</h2>
+    <p>When a guest visits the booth, the guest should also be able to receive other booth items.</p>
+    <ol>
+      <li>Add <code>Employee.FindWaterBottle</code>, <code>Employee.FindMap</code>, and <code>Employee.FindCouponBook</code>.</li>
+      <li>Add <code>Booth.SellWaterBottle</code>.</li>
+      <li>Add <code>Booth.GiveFreeMap</code>.</li>
+      <li>Add <code>Booth.GiveFreeCouponBook</code>.</li>
+      <li>Update <code>Guest.VisitTicketBooth</code> so it attempts the full visit workflow.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Sequence diagram showing ticket, water bottle, map, and coupon book interactions.</div>
+
+    <h3>Rules</h3>
+    <ul>
+      <li>Selling a water bottle should reduce water bottle inventory and increase the booth's money balance.</li>
+      <li>Giving a map should reduce map inventory.</li>
+      <li>Giving a coupon book should reduce coupon book inventory.</li>
+      <li>The method should still return the ticket result needed for admission.</li>
+    </ul>
+
+    <h2>6. Update the Browser Dashboard</h2>
+    <p>The web page should make testing easier. Add or update dashboard values so you can see the result of each button click.</p>
+    <ol>
+      <li>Display the current number of tickets.</li>
+      <li>Display the current number of water bottles.</li>
+      <li>Display the current number of maps.</li>
+      <li>Display the current number of coupon books.</li>
+      <li>Display the booth's money balance.</li>
+      <li>Display the latest result message.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Browser dashboard after successful admission showing inventory counts and status message.</div>
+
+    <h2>7. Debug the Web Flow</h2>
+    <ol>
+      <li>Set a breakpoint in <code>OnPostAdmitDemoGuest</code>.</li>
+      <li>Set breakpoints in <code>Guest.VisitTicketBooth</code>, <code>Booth.SellTicket</code>, and <code>Employee.FindTicket</code>.</li>
+      <li>Run <code>Zoo.Web</code>.</li>
+      <li>Click the Admit Guest button.</li>
+      <li>Step through the method calls and confirm the sequence matches the diagram.</li>
+    </ol>
+
+    <h2>Final Check for Part 3</h2>
+    <ul class="checklist">
+      <li>The web app builds and runs in the browser.</li>
+      <li>The Admit Guest button triggers server-side code.</li>
+      <li>Guests cannot enter without a valid ticket.</li>
+      <li>Money changes happen only when a sale succeeds.</li>
+      <li>Inventory counts decrease correctly.</li>
+      <li>The page displays a clear result message instead of relying on an exception.</li>
+      <li>The full solution has no compiler errors or warnings.</li>
+    </ul>
+
+    <h2>Final Submission</h2>
+    <ol>
+      <li>Ensure the application has no compiler errors or warnings.</li>
+      <li>Make the code StyleCop compliant if required by your course.</li>
+      <li>Remove all <code>bin</code> and <code>obj</code> folders from the solution before zipping, unless your instructor says otherwise.</li>
+      <li>Zip the full Visual Studio solution.</li>
+      <li>Submit the zipped solution and any required screenshots or notes.</li>
+    </ol>
+
+    <p class="footer-note">Submit your completed Part 3 solution according to your instructor's directions.</p>
+  </main>
+</body>
+</html>
