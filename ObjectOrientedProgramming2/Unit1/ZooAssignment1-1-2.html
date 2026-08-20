@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zoo 1.1 Part 1: Project Organization</title>
+  <link rel="stylesheet" type="text/css" href="https://mstcStroik.github.io/CourseContents/ObjectOrientedProgramming2/Unit1/styles/Style1-1.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Zoo 1.1, Part 2: Booth Items and Inventory</h1>
+      <p class="subtitle">ASP.NET Core web app version</p>
+    </header>
+
+    <section class="card">
+      <p>In this part, you will create the item classes used by the zoo's ticket booth, then populate the booth with inventory. The web app does not need to sell the items yet. That behavior comes in Part 3.</p>
+    </section>
+
+    <h2>Topics Covered</h2>
+    <ul>
+      <li>Class creation from a diagram</li>
+      <li>Fields and properties</li>
+      <li>Constructor initialization</li>
+      <li>Lists of objects</li>
+      <li>Loops</li>
+      <li><code>DateTime</code></li>
+      <li>Encapsulation through object state</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>OOP reminder:</strong> Encapsulation means an object protects and manages its own data. A booth should own its inventory. Other code should ask the booth to do work instead of reaching directly into its lists.</p>
+    </div>
+
+    <h2>1. Create the Booth Items Project</h2>
+    <ol>
+      <li>Create a class library project named <code>Zoo.BoothItems</code>.</li>
+      <li>Add references to this project from any project that needs to create or use booth items.</li>
+      <li>Use the namespace <code>Zoo.BoothItems</code> for all booth item classes.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Package diagram showing Zoo.BoothItems connected to the rest of the solution.</div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li><code>Zoo.BoothItems</code> exists in the solution.</li>
+      <li>The project builds successfully before classes are added.</li>
+    </ul>
+
+    <h2>2. Create the Booth Item Classes</h2>
+    <p>Create these classes in <code>Zoo.BoothItems</code>:</p>
+    <ul>
+      <li><code>CouponBook</code></li>
+      <li><code>Map</code></li>
+      <li><code>Ticket</code></li>
+      <li><code>WaterBottle</code></li>
+    </ul>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Class diagram for CouponBook, Map, Ticket, and WaterBottle.</div>
+
+    <h3>Class Requirements</h3>
+    <ul>
+      <li><code>CouponBook</code> should store date made, date expired, and weight.</li>
+      <li><code>Map</code> should store date issued and weight.</li>
+      <li><code>Ticket</code> should store redeemed status, price, serial number, and weight.</li>
+      <li><code>WaterBottle</code> should store price, serial number, and weight.</li>
+    </ul>
+
+    <h3>Constructor Requirements</h3>
+    <ol>
+      <li>Initialize all fields in each constructor.</li>
+      <li>Use get-only properties for values that outside code can read but should not freely change.</li>
+      <li>For <code>Ticket</code>, add a <code>Redeem</code> method that can mark the ticket as redeemed.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>Encapsulation check:</strong> Do not make fields public just because another class needs to read a value. Use properties to expose only the information that should be visible.</p>
+    </div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li><code>Zoo.BoothItems</code> builds successfully.</li>
+      <li>The full solution builds successfully.</li>
+    </ul>
+
+    <h2>3. Add Booth Item Collections</h2>
+    <p>The booth needs a collection for each type of item it can sell or give away.</p>
+    <ol>
+      <li>Open the <code>Booth</code> class.</li>
+      <li>Add a private list for each booth item type.</li>
+      <li>Initialize each list in the <code>Booth</code> constructor.</li>
+      <li>Add references and <code>using</code> directives as needed.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Class diagram showing Booth with couponBooks, maps, tickets, and waterBottles lists.</div>
+
+    <div class="warning">
+      <p><strong>Design note:</strong> The lists represent booth inventory. Keep them controlled by the <code>Booth</code> class. Later, methods such as <code>SellTicket</code> and <code>GiveFreeMap</code> will decide when items leave these lists.</p>
+    </div>
+
+    <h2>4. Create Booth Inventory</h2>
+    <p>Inside the <code>Booth</code> constructor, use loops to create the starting inventory.</p>
+    <ol>
+      <li>Create five coupon books.</li>
+      <li>Create ten maps.</li>
+      <li>Create five tickets.</li>
+      <li>Create five water bottles.</li>
+      <li>Give each ticket and water bottle a unique sequential serial number.</li>
+    </ol>
+
+    <h3>Required Values</h3>
+    <ul>
+      <li>Coupon books are made today and expire one year after today's date.</li>
+      <li>Maps are issued today and weigh <code>0.5</code> pounds.</li>
+      <li>Tickets cost <code>$15</code> and weigh <code>0.01</code> pounds.</li>
+      <li>Water bottles cost <code>$3</code> and weigh <code>1</code> pound.</li>
+    </ul>
+
+    <h2>5. Use DateTime Carefully</h2>
+    <p>Use <code>DateTime.Now</code> or another appropriate <code>DateTime</code> value when creating maps and coupon books.</p>
+    <ol>
+      <li>Do not hard-code dates.</li>
+      <li>Do not store one shared local <code>DateTime</code> variable for all maps and coupon books unless your instructor tells you to.</li>
+      <li>Create date values where the object is created so you can clearly see when each object was initialized.</li>
+    </ol>
+
+    <div class="warning">
+      <p><strong>Tip:</strong> <code>DateTime.Now.AddYears(1)</code> can be used to create an expiration date one year in the future.</p>
+    </div>
+
+    <h2>6. Remove Hard-Coded Price Values from the Constructor</h2>
+    <p>The ticket and water bottle prices should be provided to the booth rather than buried as repeated values throughout the constructor.</p>
+    <ol>
+      <li>Add a water bottle price parameter to the <code>Booth</code> constructor.</li>
+      <li>Add a water bottle price parameter to the <code>Zoo</code> constructor if the zoo creates the booth.</li>
+      <li>Use the booth's price property when creating water bottles.</li>
+      <li>Keep ticket price handled consistently through the zoo and booth constructors.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Class diagram showing Zoo constructor passing ticketPrice and waterBottlePrice to Booth.</div>
+
+    <div class="callout">
+      <p><strong>OOP reminder:</strong> A constructor should leave an object ready to use. If a booth needs prices in order to create inventory, require those prices when the booth is created.</p>
+    </div>
+
+    <h2>7. Inspect the Inventory in the Web App</h2>
+    <p>The original assignment used a WPF debugger breakpoint. In this web version, you can still use the debugger, but the browser can also help show current state.</p>
+    <ol>
+      <li>Set a breakpoint in the <code>Booth</code> constructor after the loops.</li>
+      <li>Run <code>Zoo.Web</code>.</li>
+      <li>Inspect the booth lists in the debugger.</li>
+      <li>If the dashboard already displays inventory counts, confirm the counts in the browser as well.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Browser dashboard showing inventory counts for tickets, water bottles, maps, and coupon books.</div>
+
+    <h2>Final Check for Part 2</h2>
+    <ul class="checklist">
+      <li><code>Zoo.BoothItems</code> builds successfully.</li>
+      <li>The full solution builds successfully.</li>
+      <li>The booth contains the correct number of each item.</li>
+      <li>Tickets and water bottles have unique serial numbers.</li>
+      <li>Dates are created with <code>DateTime</code>, not hard-coded values.</li>
+      <li>Price values are passed into the objects that need them.</li>
+    </ul>
+
+    <p class="footer-note">Submit your completed Part 2 solution according to your instructor's directions.</p>
+  </main>
+</body>
+</html>
