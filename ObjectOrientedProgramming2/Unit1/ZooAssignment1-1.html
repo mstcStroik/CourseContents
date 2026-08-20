@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zoo 1.1 Part 1: Project Organization</title>
+  <link rel="stylesheet" type="text/css" href="https://mstcStroik.github.io/CourseContents/Unit1/styles/Style1-1.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Zoo 1.1, Part 1: Project Organization</h1>
+      <p class="subtitle">ASP.NET Core web app version</p>
+    </header>
+
+    <section class="card">
+      <p>In this part, you will clean up the starter solution and begin separating the zoo application into class library projects. The goal is to make the code easier to understand, reuse, and extend while keeping the ASP.NET Core web app as the browser-facing project.</p>
+      <p>You will work in the provided <code>ZooWeb1.1</code> solution. The web project is <code>Zoo.Web</code>.</p>
+    </section>
+
+    <h2>Topics Covered</h2>
+    <ul>
+      <li>Multi-project solutions</li>
+      <li>Namespaces</li>
+      <li><code>using</code> directives</li>
+      <li>Project references</li>
+      <li>Debug and Release builds</li>
+      <li>Abstraction through project and namespace organization</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>OOP reminder:</strong> Abstraction means naming the important ideas in the problem. When you create projects and namespaces such as <code>Zoo.Foods</code>, <code>Zoo.Animals</code>, and <code>Zoo.People</code>, you are grouping related concepts so the solution communicates its design.</p>
+    </div>
+
+    <h2>1. Review the Web Application</h2>
+    <ol>
+      <li>Open the provided <code>ZooWeb1.1.sln</code> solution in Visual Studio.</li>
+      <li>Set <code>Zoo.Web</code> as the startup project if it is not already selected.</li>
+      <li>Run the application and confirm that the zoo dashboard opens in a browser.</li>
+      <li>Review the starter files in <code>Pages/Index.cshtml</code>, <code>Pages/Index.cshtml.cs</code>, and <code>Services/ZooStateService.cs</code>.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Browser screenshot of the starter Zoo Dashboard.</div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>The solution opens in Visual Studio.</li>
+      <li><code>Zoo.Web</code> runs in the browser.</li>
+      <li>You can identify the Razor page and PageModel used for the dashboard.</li>
+    </ul>
+
+    <h2>2. Remove Unused Using Directives</h2>
+    <p>Visual Studio may add <code>using</code> directives that a file does not need. Clean files are easier to read and make dependencies easier to see.</p>
+    <ol>
+      <li>Remove and sort unused <code>using</code> directives in every class file in the solution.</li>
+      <li>Include web files such as <code>Index.cshtml.cs</code> and service files such as <code>ZooStateService.cs</code>.</li>
+      <li>Build the solution.</li>
+    </ol>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>The solution builds successfully.</li>
+      <li>No compiler errors or warnings were introduced while removing <code>using</code> directives.</li>
+    </ul>
+
+    <h2>3. Add a Debug Build Indicator</h2>
+    <p>The original desktop assignment added <code>[DEBUG]</code> to the WPF window title. In the web version, display a visible debug indicator on the page when the application is running in a Debug build.</p>
+    <ol>
+      <li>Open <code>Pages/Index.cshtml.cs</code>.</li>
+      <li>Use a compiler directive to set the existing <code>IsDebugBuild</code> property when the project is built in Debug mode.</li>
+      <li>Open <code>Pages/Index.cshtml</code> and confirm that the page displays the debug indicator when <code>IsDebugBuild</code> is true.</li>
+    </ol>
+
+    <pre><code>#if DEBUG
+    this.IsDebugBuild = true;
+#endif</code></pre>
+
+    <div class="warning">
+      <p><strong>Tip:</strong> Compiler directives are often written at the far left margin. This makes them stand out from ordinary C# code.</p>
+    </div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>Run the web app in Debug mode and confirm that <code>[DEBUG]</code> appears on the page.</li>
+      <li>Run or publish in Release mode and confirm that <code>[DEBUG]</code> does not appear.</li>
+    </ul>
+
+    <h2>4. Create the Foods Class Library</h2>
+    <p>The starter code contains business classes that should not remain bundled together forever. Begin by moving food-related code into its own class library.</p>
+    <ol>
+      <li>Create or use the existing class library project named <code>Zoo.Foods</code>.</li>
+      <li>Move the <code>Food</code> class into <code>Zoo.Foods</code>.</li>
+      <li>Change the namespace of <code>Food</code> to <code>Zoo.Foods</code>.</li>
+      <li>Add project references and <code>using</code> directives where needed.</li>
+    </ol>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Diagram showing Food moved from Zoo.Domain into Zoo.Foods.</div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li><code>Zoo.Foods</code> builds successfully.</li>
+      <li>The full solution builds successfully.</li>
+    </ul>
+
+    <h2>5. Create the Contracts Class Library</h2>
+    <p>Interfaces describe what an object can do. Move the shared interfaces into their own project so multiple domain projects can depend on them.</p>
+    <ol>
+      <li>Create a class library named <code>Zoo.Contracts</code>.</li>
+      <li>Move <code>IEater</code>, <code>IMover</code>, <code>IHatchable</code>, and <code>IReproducer</code> into <code>Zoo.Contracts</code>.</li>
+      <li>Change each interface namespace to <code>Zoo.Contracts</code>.</li>
+      <li>Add a reference from <code>Zoo.Contracts</code> to <code>Zoo.Foods</code> if an interface uses <code>Food</code>.</li>
+      <li>Add <code>using Zoo.Foods;</code> where needed.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>OOP reminder:</strong> An interface is an abstraction. Code that uses <code>IEater</code> can work with anything that eats without knowing the exact class.</p>
+    </div>
+
+    <h3>Check Your Work</h3>
+    <ul class="checklist">
+      <li>Build <code>Zoo.Foods</code>.</li>
+      <li>Build <code>Zoo.Contracts</code>.</li>
+      <li>Fix missing references, namespaces, or <code>using</code> directives before continuing.</li>
+    </ul>
+
+    <h2>6. Create the Remaining Domain Projects</h2>
+    <p>Continue separating related classes into class libraries. Your instructor may provide an exact package diagram. Use that diagram as the source of truth.</p>
+
+    <div class="image-placeholder">IMAGE PLACEHOLDER: Package diagram for the final Part 1 project structure.</div>
+
+    <h3>Suggested Project Structure</h3>
+    <ul>
+      <li><code>Zoo.Animals</code>: <code>Animal</code>, <code>Bird</code>, <code>Mammal</code>, <code>Dingo</code>, <code>Hummingbird</code>, <code>Platypus</code></li>
+      <li><code>Zoo.People</code>: <code>Guest</code>, <code>Employee</code>, <code>Wallet</code></li>
+      <li><code>Zoo.Facilities</code>: <code>Zoo</code>, <code>Booth</code>, <code>BirthingRoom</code>, <code>Restroom</code>, <code>VendingMachine</code></li>
+      <li><code>Zoo.Toys</code>: <code>WuvLuv</code></li>
+    </ul>
+
+    <ol>
+      <li>Create each class library project.</li>
+      <li>Move the appropriate class files into each project.</li>
+      <li>Change namespaces so they match project names.</li>
+      <li>Add project references as compiler errors identify missing dependencies.</li>
+      <li>Add <code>using</code> directives as needed.</li>
+    </ol>
+
+    <h3>Recommended Build Order</h3>
+    <ol>
+      <li><code>Zoo.Foods</code></li>
+      <li><code>Zoo.Contracts</code></li>
+      <li><code>Zoo.Animals</code></li>
+      <li><code>Zoo.People</code></li>
+      <li><code>Zoo.Toys</code></li>
+      <li><code>Zoo.Facilities</code></li>
+      <li><code>Zoo.Web</code></li>
+    </ol>
+
+    <div class="warning">
+      <p><strong>Common error:</strong> A metadata file error often means a project lower in the dependency chain did not build. Build from the bottom of the dependency chain upward.</p>
+    </div>
+
+    <h2>Final Check for Part 1</h2>
+    <ul class="checklist">
+      <li>Every class library builds successfully.</li>
+      <li><code>Zoo.Web</code> builds and runs in the browser.</li>
+      <li>Namespaces match the projects where the classes now live.</li>
+      <li>Project references point in the correct direction.</li>
+      <li>The web project is responsible for browser interaction, not core zoo business rules.</li>
+    </ul>
+
+    <p class="footer-note">Submit your completed Part 1 solution according to your instructor's directions.</p>
+  </main>
+</body>
+</html>
